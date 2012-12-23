@@ -45,6 +45,7 @@
 uint8_t USB_Rx_Buffer[VIRTUAL_COM_PORT_DATA_SIZE];
 extern  uint8_t USART_Rx_Buffer[];
 extern uint32_t USART_Rx_ptr_out;
+extern uint32_t USART_Rx_ptr_in;
 extern uint32_t USART_Rx_length;
 extern uint8_t  USB_Tx_State;
 
@@ -110,6 +111,7 @@ extern volatile uint32_t cs_counter;
 void EP3_OUT_Callback(void)
 {
   uint16_t USB_Rx_Cnt;
+  uint32_t i;
   
   GPIO_ResetBits(GPIOC, 1<<6);
   if (!cs_counter) cs_counter = 1500000;
@@ -120,7 +122,13 @@ void EP3_OUT_Callback(void)
   /* USB data will be immediately processed, this allow next USB traffic being 
   NAKed till the end of the USART Xfer */
   
-  USB_To_USART_Send_Data(USB_Rx_Buffer, USB_Rx_Cnt);
+//  USB_To_USART_Send_Data(USB_Rx_Buffer, USB_Rx_Cnt);
+  for (i=0; i<USB_Rx_Cnt; i++){
+    USART_Rx_Buffer[USART_Rx_ptr_in++] = USB_Rx_Buffer[i];
+    if (USART_Rx_ptr_in >= USART_RX_DATA_SIZE )
+      USART_Rx_ptr_in=0;
+  }
+  USART_Rx_length+=i;
 
   
 #ifndef STM32F10X_CL

@@ -175,28 +175,6 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
   USB_Istr();
 }
 #endif /* STM32F10X_CL */
-/*******************************************************************************
-* Function Name  : EVAL_COM1_IRQHandler
-* Description    : This function handles EVAL_COM1 global interrupt request.
-* Input          : None
-* Output         : None
-* Return         : None
-*******************************************************************************/
-void EVAL_COM1_IRQHandler(void)
-{
-  if (USART_GetITStatus(EVAL_COM1, USART_IT_RXNE) != RESET)
-  {
-    /* Send the received data to the PC Host*/
-    USART_To_USB_Send_Data();
-  }
-
-  /* If overrun condition occurs, clear the ORE flag and recover communication */
-  if (USART_GetFlagStatus(EVAL_COM1, USART_FLAG_ORE) != RESET)
-  {
-    (void)USART_ReceiveData(EVAL_COM1);
-  }
-}
-
 
 #ifdef STM32F10X_CL
 /*******************************************************************************

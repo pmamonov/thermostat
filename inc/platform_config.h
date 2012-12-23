@@ -48,7 +48,7 @@
 #include "stm32f10x_rcc.h"
 #include "misc.h"
  #if defined (USE_STM3210B_EVAL)
-  #include "stm3210b_eval.h"
+//  #include "stm3210b_eval.h"
   #include "stm32f10x_rcc.h"
   #include "stm32f10x_gpio.h"
  #elif defined (USE_STM3210E_EVAL)

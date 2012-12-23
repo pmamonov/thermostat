@@ -59,21 +59,8 @@ int main(void)
   USB_Interrupts_Config();
   USB_Init();
 
-  GPIO_InitTypeDef GPIO_InitStructure;
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-  GPIO_InitStructure.GPIO_Pin = 1<<6;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
-  GPIO_SetBits(GPIOC, 1<<6);
-
   while (1)
   {
-
-    if (!(GPIO_ReadOutputData(GPIOC)&(1<<6))){
-      while (cs_counter) cs_counter--;
-      GPIO_SetBits(GPIOC, 1<<6);
-    }
 
   }
 }

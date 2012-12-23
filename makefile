@@ -1,4 +1,4 @@
-PREFIX=/home/piton/devel/arm/arm-2012.09/bin/arm-none-eabi
+PREFIX=arm-none-eabi
 AS      = $(PREFIX)-as
 CC      = $(PREFIX)-gcc
 LD      = $(PREFIX)-ld
@@ -36,8 +36,7 @@ OBJ = src/startup_stm32f10x_md.o\
   STM32_USB-FS-Device_Driver/src/usb_init.o\
   STM32_USB-FS-Device_Driver/src/usb_core.o\
   STM32_USB-FS-Device_Driver/src/usb_sil.o\
-  CM3/CoreSupport/core_cm3.o\
-  src/stm3210b_eval-strip.o
+  CM3/CoreSupport/core_cm3.o
 
 # CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.o\
 
