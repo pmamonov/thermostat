@@ -15,7 +15,9 @@ CFLAGS = -mcpu=cortex-m3 -mthumb -Os -g\
  -ISTM32F10x_StdPeriph_Driver/inc\
  -DSTM32F10X_MD\
  -DUSE_STM3210B_EVAL\
- -DUSE_STDPERIPH_DRIVER
+ -DUSE_STDPERIPH_DRIVER\
+ -IFreeRTOS/Source/include\
+ -IFreeRTOS/Source/portable/GCC/ARM_CM3
 
 #src/startup_stm32f10x_md.o\
 
@@ -31,6 +33,11 @@ OBJ = src/startup_stm32f10x_md.o\
   src/usb_pwr.o\
   src/cdcio.o\
   src/newlib_stubs.o\
+  FreeRTOS/Source/tasks.o\
+  FreeRTOS/Source/queue.o\
+  FreeRTOS/Source/list.o\
+  FreeRTOS/Source/portable/GCC/ARM_CM3/port.o\
+  FreeRTOS/Source/portable/MemMang/heap_3.o\
   STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o\
   STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o\
   STM32F10x_StdPeriph_Driver/src/misc.o\

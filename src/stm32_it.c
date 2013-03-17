@@ -121,9 +121,9 @@ void UsageFault_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SVC_Handler(void)
+/*void SVC_Handler(void)
 {
-}
+}*/
 
 /*******************************************************************************
 * Function Name  : DebugMon_Handler
@@ -143,9 +143,9 @@ void DebugMon_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void PendSV_Handler(void)
+/*void PendSV_Handler(void)
 {
-}
+}*/
 
 /*******************************************************************************
 * Function Name  : SysTick_Handler
@@ -154,9 +154,9 @@ void PendSV_Handler(void)
 * Output         : None
 * Return         : None
 *******************************************************************************/
-void SysTick_Handler(void)
+/*void SysTick_Handler(void)
 {
-}
+}*/
 #ifndef STM32F10X_CL
 /*******************************************************************************
 * Function Name  : USB_IRQHandler

@@ -6,6 +6,12 @@
 #include "stdlib.h"
 #include "string.h"
 #include "cdcio.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+
+void vChatTask(void* vpars);
+void vBlinkTask(void* vpars);
 
 int main(void)
 {
@@ -24,9 +30,12 @@ int main(void)
   USB_Interrupts_Config();
   USB_Init();
 
-  char s[32];
-  char cmd[32];
-  while (1)
+  xTaskCreate( vChatTask, "chat", 128, NULL, tskIDLE_PRIORITY+1, NULL );
+  xTaskCreate( vBlinkTask, "blink", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL );
+  vTaskStartScheduler();
+
+  for (;1;);
+/*  while (1)
   {
     cdc_gets(cmd, sizeof(cmd));
 
@@ -36,8 +45,30 @@ int main(void)
     if (GPIO_ReadOutputData(GPIOC) & (1<<6)) GPIO_ResetBits(GPIOC, 1<<6);
     else GPIO_SetBits(GPIOC, 1<<6);
 //    for (i=1000000; i;i--);
+  }*/
+}
+
+void vChatTask(void *vpars){
+  char s[64];
+  char cmd[32];
+  int i=0;
+  while (1){
+    cdc_gets(cmd, sizeof(cmd));
+//    sniprintf(s,sizeof(s),"%d> %s",i,cmd);
+    cdc_write_buf(&cdc_out, cmd, strlen(cmd));
   }
 }
+
+void vBlinkTask(void *vpars){
+  volatile int i;
+  while (1){
+    if (GPIO_ReadOutputData(GPIOC) & (1<<6)) GPIO_ResetBits(GPIOC, 1<<6);
+    else GPIO_SetBits(GPIOC, 1<<6);
+    for (i=1000000; i;i--);
+  }
+}
+
+
 #ifdef USE_FULL_ASSERT
 void assert_failed(uint8_t* file, uint32_t line)
 {
