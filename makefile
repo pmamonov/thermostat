@@ -1,6 +1,7 @@
-PREFIX=arm-none-eabi
+PREFIX=../arm-2012.09/bin/arm-none-eabi
 AS      = $(PREFIX)-as
 CC      = $(PREFIX)-gcc
+CXX     = $(PREFIX)-g++
 LD      = $(PREFIX)-ld
 OBJCOPY = $(PREFIX)-objcopy
 
@@ -16,6 +17,8 @@ CFLAGS = -mcpu=cortex-m3 -mthumb -Os -g\
  -DUSE_STM3210B_EVAL\
  -DUSE_STDPERIPH_DRIVER
 
+#src/startup_stm32f10x_md.o\
+
 OBJ = src/startup_stm32f10x_md.o\
   src/main.o \
   src/hw_config.o\
@@ -26,9 +29,10 @@ OBJ = src/startup_stm32f10x_md.o\
   src/usb_istr.o\
   src/usb_prop.o\
   src/usb_pwr.o\
+  src/cdcio.o\
+  src/newlib_stubs.o\
   STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o\
   STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o\
-  STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o\
   STM32F10x_StdPeriph_Driver/src/misc.o\
   STM32_USB-FS-Device_Driver/src/usb_regs.o\
   STM32_USB-FS-Device_Driver/src/usb_int.o\
@@ -38,8 +42,6 @@ OBJ = src/startup_stm32f10x_md.o\
   STM32_USB-FS-Device_Driver/src/usb_sil.o\
   CM3/CoreSupport/core_cm3.o
 
-# CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.o\
-
 all: main.bin
 
 main.bin: main.elf
@@ -47,10 +49,11 @@ main.bin: main.elf
 	$(PREFIX)-size $<
 
 main.elf: $(OBJ)
-	$(CC) -o $@ -nostartfiles -Wl,-T$(LDSCRIPT) $^
+	$(CXX) $(CFLAGS) -o $@ -nostartfiles  -Wl,-T$(LDSCRIPT)  $^
+#	$(CC) -o $@ -nostartfiles -Wl,-T$(LDSCRIPT) $^
 
 clean:
-	rm -f $(OBJ) *.elf *.bin
+	rm -f $(OBJ) *.elf *.bin *.ihex
 
 #%.o: %.c
 #  $(CC) $(CFLAGS) -c $< -o $@
