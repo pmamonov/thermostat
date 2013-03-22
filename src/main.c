@@ -30,8 +30,8 @@ int main(void)
   USB_Interrupts_Config();
   USB_Init();
 
+  xTaskCreate( vBlinkTask, "blink", 16, NULL, tskIDLE_PRIORITY+1, NULL );
   xTaskCreate( vChatTask, "chat", 128, NULL, tskIDLE_PRIORITY+1, NULL );
-  xTaskCreate( vBlinkTask, "blink", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+1, NULL );
   vTaskStartScheduler();
 
   for (;1;);

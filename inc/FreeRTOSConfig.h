@@ -130,7 +130,12 @@ to exclude the API function. */
 #define INCLUDE_vTaskDelayUntil			1
 #define INCLUDE_vTaskDelay				1
 
-#define configPRIO_BITS       4        /* 15 priority levels */
+/* Use the system definition, if there is one */
+#ifdef __NVIC_PRIO_BITS
+	#define configPRIO_BITS       __NVIC_PRIO_BITS
+#else
+	#define configPRIO_BITS       4        /* 15 priority levels */
+#endif
 
 #define configLIBRARY_LOWEST_INTERRUPT_PRIORITY			15
 #define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY	5
