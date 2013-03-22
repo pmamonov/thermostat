@@ -30,8 +30,8 @@ int main(void)
   USB_Interrupts_Config();
   USB_Init();
 
-  xTaskCreate( vBlinkTask, "blink", 16, NULL, tskIDLE_PRIORITY+1, NULL );
-  xTaskCreate( vChatTask, "chat", 128, NULL, tskIDLE_PRIORITY+1, NULL );
+  xTaskCreate( vBlinkTask, "blink", 32, NULL, tskIDLE_PRIORITY+1, NULL );
+  xTaskCreate( vChatTask, "chat", 256, NULL, tskIDLE_PRIORITY+1, NULL );
   vTaskStartScheduler();
 
   for (;1;);
@@ -54,8 +54,9 @@ void vChatTask(void *vpars){
   int i=0;
   while (1){
     cdc_gets(cmd, sizeof(cmd));
-//    sniprintf(s,sizeof(s),"%d> %s",i,cmd);
-    cdc_write_buf(&cdc_out, cmd, strlen(cmd));
+    sniprintf(s,sizeof(s),"%d %s",i++,cmd);
+//    cdc_write_buf(&cdc_out, cmd, strlen(cmd));
+    cdc_write_buf(&cdc_out, s, strlen(s));
   }
 }
 
@@ -68,6 +69,9 @@ void vBlinkTask(void *vpars){
   }
 }
 
+void vApplicationStackOverflowHook( xTaskHandle xTask, signed portCHAR *pcTaskName ){
+  while(1);
+}
 
 #ifdef USE_FULL_ASSERT
 void assert_failed(uint8_t* file, uint32_t line)
