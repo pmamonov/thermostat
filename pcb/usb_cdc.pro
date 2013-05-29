@@ -1,4 +1,4 @@
-update=Птн 22 Мар 2013 22:53:54
+update=29.05.2013 18:44:20
 version=1
 last_client=eeschema
 [cvpcb]
@@ -101,3 +101,6 @@ LibName28=atmel
 LibName29=contrib
 LibName30=valves
 LibName31=/home/piton/devel/arm/stm32f102r
+LibName32=p6au
+LibName33=p6cui
+LibName34=tlp181gb
