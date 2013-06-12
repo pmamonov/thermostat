@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 04.06.2013 16:26:41
+EESchema Schematic File Version 2  date Пнд 10 Июн 2013 18:05:02
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,6 +29,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:stm32f102r
 LIBS:p6au
 LIBS:p6cui
 LIBS:tlp181gb
@@ -39,7 +40,7 @@ $Descr A2 23400 16535
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "4 jun 2013"
+Date "10 jun 2013"
 Rev ""
 Comp ""
 Comment1 ""
@@ -2194,19 +2195,19 @@ Text Notes 7950 7500 0    60   ~ 0
 U\nS\nB\nL\nC\n6
 Text Label 7900 5150 0    60   ~ 0
 tem3_dir
-Text Label 7900 5250 0    60   ~ 0
+Text Label 6300 5450 2    60   ~ 0
 tem3_en
 Text Label 7900 5350 0    60   ~ 0
 tem2_dir
-Text Label 7900 5450 0    60   ~ 0
+Text Label 6300 5350 2    60   ~ 0
 tem2_en
 Text Label 7900 5550 0    60   ~ 0
 tem1_dir
-Text Label 7900 5650 0    60   ~ 0
+Text Label 6300 4750 2    60   ~ 0
 tem1_en
 Text Label 7900 5750 0    60   ~ 0
 tem0_dir
-Text Label 7900 5850 0    60   ~ 0
+Text Label 6300 4650 2    60   ~ 0
 tem0_en
 $Comp
 L GND #PWR105
