@@ -61,8 +61,8 @@ class Thermostat:
       Setup serial communication with scales.
 
         baudrate: speed of communication
-        bytesize: number of bits per character
-        parity: parity bit
+        bytesize: number of bits per data word
+        parity: enable parity checking
         stopbits: number of stop bits
         rtscts: enable hardware flow control
 

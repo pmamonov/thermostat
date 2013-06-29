@@ -9,14 +9,20 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
+#include "ts.h"
+#include "strtok.h"
 
 void vChatTask(void* vpars);
 void vBlinkTask(void* vpars);
 
-int main(void)
-{
+int main(void){
+  portBASE_TYPE err;
+  char s[64];
+
+
   SystemInit();
   Set_System();
+
 
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
   GPIO_InitTypeDef sGPIOinit;
@@ -30,8 +36,21 @@ int main(void)
   USB_Interrupts_Config();
   USB_Init();
 
-  xTaskCreate( vBlinkTask, "blink", 32, NULL, tskIDLE_PRIORITY+1, NULL );
-  xTaskCreate( vChatTask, "chat", 256, NULL, tskIDLE_PRIORITY+1, NULL );
+  err = xTaskCreate( vBlinkTask, "blink", 32, NULL, tskIDLE_PRIORITY+1, NULL );
+  if ( err == pdPASS)
+    cdc_write_buf(&cdc_out, "blink started\n", 0);
+  else{
+    sniprintf(s, sizeof(s),"blink failed %d", err);
+    cdc_write_buf(&cdc_out, s, 0);
+  }
+  err = xTaskCreate( vChatTask, "chat", 256, NULL, tskIDLE_PRIORITY+1, NULL );
+  if (err == pdPASS)
+    cdc_write_buf(&cdc_out, "chat started\n", 0);
+  else{
+    sniprintf(s, sizeof(s),"chat failed %d", err);
+    cdc_write_buf(&cdc_out, s, 0);
+  }
+
   vTaskStartScheduler();
 
   for (;1;);
@@ -50,13 +69,39 @@ int main(void)
 
 void vChatTask(void *vpars){
   char s[64];
-  char cmd[32];
-  int i=0;
+  char cmd[64];
+  char *tk;
+  int16_t i;
+
   while (1){
     cdc_gets(cmd, sizeof(cmd));
-    sniprintf(s,sizeof(s),"%d %s",i++,cmd);
 //    cdc_write_buf(&cdc_out, cmd, strlen(cmd));
-    cdc_write_buf(&cdc_out, s, strlen(s));
+
+    tk = _strtok(cmd, " \n");
+    if (strcmp(tk, "temp") == 0){
+      for (i=0; i<8; i++){
+        sniprintf(s,sizeof(s),"%d:%d ", i, ts_get(i));
+        cdc_write_buf(&cdc_out, s, strlen(s));
+      }
+        cdc_write_buf(&cdc_out, "\nOK\n", 4);
+    }
+    else
+    if (strcmp(tk, "snsi") == 0){
+      sniprintf(s,sizeof(s),"%d\nOK\n", ts_init());
+      cdc_write_buf(&cdc_out, s, strlen(s));
+    }
+    else
+    if (strcmp(tk, "test") == 0){
+      while (tk=_strtok(0,0)){
+        cdc_write_buf(&cdc_out, tk, strlen(tk));
+        cdc_write_buf(&cdc_out, "\n", 1);
+      }
+      cdc_write_buf(&cdc_out, "OK\n", 4);
+    }
+    else
+      cdc_write_buf(&cdc_out, "ERR\n", 4);
+
+//    cdc_write_buf(&cdc_out, s, strlen(s));
   }
 }
 

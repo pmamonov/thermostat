@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Пнд 10 Июн 2013 18:05:02
+EESchema Schematic File Version 2  date Чтв 27 Июн 2013 16:33:48
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -40,7 +40,7 @@ $Descr A2 23400 16535
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "10 jun 2013"
+Date "27 jun 2013"
 Rev ""
 Comp ""
 Comment1 ""
@@ -48,6 +48,11 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Wire Wire Line
+	5950 4950 6300 4950
+Connection ~ 6300 2800
+Wire Wire Line
+	6450 2800 6300 2800
 Wire Notes Line
 	8000 7300 8000 7400
 Wire Notes Line
@@ -241,8 +246,6 @@ Wire Wire Line
 	8800 3750 8800 3550
 Wire Wire Line
 	8200 3550 7900 3550
-Wire Wire Line
-	6150 3150 6300 3150
 Wire Wire Line
 	5750 3950 5750 4300
 Wire Wire Line
@@ -768,6 +771,77 @@ Wire Notes Line
 	7700 7600 7800 7600
 Wire Notes Line
 	8000 8050 8000 7950
+Wire Wire Line
+	6300 3150 6300 2500
+Wire Wire Line
+	6100 5550 6300 5550
+$Comp
+L R R?
+U 1 1 51CC30F7
+P 5700 4950
+F 0 "R?" V 5780 4950 50  0000 C CNN
+F 1 "200" V 5700 4950 50  0000 C CNN
+	1    5700 4950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 51CC2D9D
+P 5600 5550
+F 0 "#PWR?" H 5600 5550 30  0001 C CNN
+F 1 "GND" H 5600 5480 30  0001 C CNN
+	1    5600 5550
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51CC2CF0
+P 5850 5550
+F 0 "R?" V 5930 5550 50  0000 C CNN
+F 1 "10k" V 5850 5550 50  0000 C CNN
+	1    5850 5550
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 51CC2CC7
+P 6950 2800
+F 0 "#PWR?" H 6950 2800 30  0001 C CNN
+F 1 "GND" H 6950 2730 30  0001 C CNN
+	1    6950 2800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51CC2CAD
+P 6700 2800
+F 0 "R?" V 6780 2800 50  0000 C CNN
+F 1 "10k" V 6700 2800 50  0000 C CNN
+	1    6700 2800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L 3V3 #PWR?
+U 1 1 51CC2C90
+P 6900 2500
+F 0 "#PWR?" H 6900 2600 40  0001 C CNN
+F 1 "3V3" H 6900 2625 40  0000 C CNN
+	1    6900 2500
+	0    1    1    0   
+$EndComp
+$Comp
+L JUMPER JP?
+U 1 1 51CC2C58
+P 6600 2500
+F 0 "JP?" H 6600 2650 60  0000 C CNN
+F 1 "JUMPER" H 6600 2420 40  0000 C CNN
+	1    6600 2500
+	1    0    0    -1  
+$EndComp
+Text Label 6300 5050 2    60   ~ 0
+usart2_rx
+Text Label 5450 4950 2    60   ~ 0
+usart2_tx
 Text Label 11650 11950 2    60   ~ 0
 tem3_dir
 Text Label 11650 12650 2    60   ~ 0
@@ -2732,15 +2806,6 @@ F 0 "C108" H 8250 3450 50  0000 L CNN
 F 1 "100n" H 8250 3250 50  0000 L CNN
 	1    8200 3350
 	1    0    0    -1  
-$EndComp
-$Comp
-L GND #PWR116
-U 1 1 514CAD39
-P 6150 3150
-F 0 "#PWR116" H 6150 3150 30  0001 C CNN
-F 1 "GND" H 6150 3080 30  0001 C CNN
-	1    6150 3150
-	0    1    -1   0   
 $EndComp
 $Comp
 L GND #PWR114
