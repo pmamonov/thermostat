@@ -1,3 +1,5 @@
+from serial import Serial
+
 class Thermostat:
   def __init__(self, device=None):
     """
@@ -6,16 +8,42 @@ class Thermostat:
 
       device: string, valid OS serial device name (passed to pySerial)
     """
-    pass
+    if not device: raise NameError, "Device search not implemented"
+    self.sr = Serial(device, timeout = 0.1)
+    self.temp_init()
+
+  def cmd(self, s):
+    while self.sr.read(1024): pass
+    self.sr.write(s+'\n')
+    r=self.sr.readlines()
+    if not r: raise NameError, "No reply from device"
+#    if r[-1].strip()[:3] == "ERR": raise NameError, "Error %s"%(r[-1].strip()[3:])
+    if r[-1].strip()[:3] == "ERR": raise NameError, "Device communication error"
+    if r[-1].strip() == "OK": return r[0].strip()
+    raise NameError, "Device reply not understood"
+
+  def temp_init(self):
+    r = int(self.cmd("snsi"))
+    s=[]
+    for i in xrange(8):
+      if (r & (1<<i)): s.append(True)
+      else: s.append(False)
+    self.sens_avail = s
+    return s
+
 
   def temp_get(self):
     """
-    Return tuple of temperature values acquired by sensors. 
-    Negative value means the sensor is absent.
+    Return dictionary of temperature values acquired by sensors. 
+    Only values of detected sensors are returned
 
-    Returns: list of temperature values
+    Returns: dict of temperature values
     """
-    temp=map(lambda i: -1, range(8))
+    r = self.cmd("temp").split(' ')
+    temp = {}
+    for iv in r: 
+      i,v = map(int, iv.split(":"))
+      if self.sens_avail[i]: temp[i] = v/256.
     return temp
 
 
