@@ -37,16 +37,16 @@ int main(void){
   USB_Interrupts_Config();
   USB_Init();
 
-  vChatTask(0);
+//  vChatTask(0);
 
-  err = xTaskCreate( vBlinkTask, "blink", 32, NULL, tskIDLE_PRIORITY+1, NULL );
+  err = xTaskCreate( vBlinkTask, "blink", 64, NULL, tskIDLE_PRIORITY+1, NULL );
   if ( err == pdPASS)
     cdc_write_buf(&cdc_out, "blink started\n", 0);
   else{
     sniprintf(s, sizeof(s),"blink failed %d", err);
     cdc_write_buf(&cdc_out, s, 0);
   }
-  err = xTaskCreate( vChatTask, "chat", 256, NULL, tskIDLE_PRIORITY+1, NULL );
+  err = xTaskCreate( vChatTask, "chat", 1024, NULL, tskIDLE_PRIORITY+1, NULL );
   if (err == pdPASS)
     cdc_write_buf(&cdc_out, "chat started\n", 0);
   else{
