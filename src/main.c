@@ -11,6 +11,7 @@
 #include "semphr.h"
 #include "ts.h"
 #include "strtok.h"
+#include "com.h"
 
 void vChatTask(void* vpars);
 void vBlinkTask(void* vpars);
@@ -35,6 +36,8 @@ int main(void){
   Set_USBClock();
   USB_Interrupts_Config();
   USB_Init();
+
+  vChatTask(0);
 
   err = xTaskCreate( vBlinkTask, "blink", 32, NULL, tskIDLE_PRIORITY+1, NULL );
   if ( err == pdPASS)
@@ -72,6 +75,7 @@ void vChatTask(void *vpars){
   char cmd[64];
   char *tk;
   int16_t i;
+  uint8_t sensors=0, com_stop;
 
   while (1){
     cdc_gets(cmd, sizeof(cmd));
@@ -80,15 +84,47 @@ void vChatTask(void *vpars){
     tk = _strtok(cmd, " \n");
     if (strcmp(tk, "temp") == 0){
       for (i=0; i<8; i++){
-        sniprintf(s,sizeof(s),"%d:%d ", i, ts_get(i));
-        cdc_write_buf(&cdc_out, s, strlen(s));
+        if (sensors & (1<<i)){
+          sniprintf(s,sizeof(s),"%d:%d ", i, ts_get(i));
+          cdc_write_buf(&cdc_out, s, strlen(s));
+        }
       }
         cdc_write_buf(&cdc_out, "\nOK\n", 4);
     }
     else
     if (strcmp(tk, "snsi") == 0){
-      sniprintf(s,sizeof(s),"%d\nOK\n", ts_init());
+      sniprintf(s,sizeof(s),"%d\nOK\n", sensors=ts_init());
       cdc_write_buf(&cdc_out, s, strlen(s));
+    }
+    else
+    if (strcmp(tk, "comi") == 0){
+      com_init(0,0,0,0,0);
+      cdc_write_buf(&cdc_out, "\nOK\n", 4);
+    }
+    else
+    if (strcmp(tk, "com") == 0){
+      com_stop=0;
+      while(!com_stop){
+        i = cdc_read_buf(&com_in, cmd, sizeof(cmd));
+        if (i) cdc_write_buf(&cdc_out, cmd, i);
+        
+        i=0;
+        while(1){
+          if (cdc_read_buf(&cdc_in, cmd, 1)) {
+            if (cmd[0]!=0xff){
+              cdc_write_buf(&com_out, cmd, 1);
+              i++;
+            }
+            else {
+              com_stop=1;
+              break;
+            }
+          }
+          else break;
+        }
+        if (i) com_send();
+      }
+      cdc_write_buf(&cdc_out, "\nOK\n", 4);
     }
     else
     if (strcmp(tk, "test") == 0){

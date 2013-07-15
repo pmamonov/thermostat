@@ -98,6 +98,12 @@ class Thermostat:
     """
     pass
 
+  def serial_start(self):
+    self.cmd("com")
+
+  def serial_end(self):
+    self.sr.write('\xff')
+
   def serial_send(self, string):
     """
       Send string to scales.

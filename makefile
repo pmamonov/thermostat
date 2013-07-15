@@ -35,6 +35,7 @@ OBJ = src/startup_stm32f10x_md.o\
   src/newlib_stubs.o\
   src/ts.o\
   src/strtok.o\
+  src/com.o\
   FreeRTOS/Source/tasks.o\
   FreeRTOS/Source/queue.o\
   FreeRTOS/Source/list.o\
@@ -43,6 +44,7 @@ OBJ = src/startup_stm32f10x_md.o\
   STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o\
   STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.o\
   STM32F10x_StdPeriph_Driver/src/stm32f10x_i2c.o\
+  STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.o\
   STM32F10x_StdPeriph_Driver/src/misc.o\
   STM32_USB-FS-Device_Driver/src/usb_regs.o\
   STM32_USB-FS-Device_Driver/src/usb_int.o\

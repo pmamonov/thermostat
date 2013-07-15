@@ -1,3 +1,5 @@
+#ifndef __cdcio_h__
+#define __cdcio_h__
 #include <stdint.h>
 
 #define IOBUFLEN 128
@@ -21,3 +23,4 @@ uint16_t cdc_write_buf(cdc_buf_t *buf, char *s, uint16_t len);
 uint16_t cdc_read_buf(cdc_buf_t *buf, char *s, uint16_t len);
 
 uint16_t cdc_gets(char *s, uint16_t len);
+#endif
