@@ -14,5 +14,5 @@ extern volatile cdc_buf_t com_in;
 extern volatile cdc_buf_t com_out;
 #endif
 
-void com_init(uint32_t baudrate, uint8_t bytesize, char parity, uint8_t stopbits, uint8_t hwfc);
+void com_init(uint32_t baudrate, uint16_t bytesize, uint16_t parity, uint16_t stopbits, uint16_t hwfc);
 void com_send();

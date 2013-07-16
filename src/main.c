@@ -76,6 +76,8 @@ void vChatTask(void *vpars){
   char *tk;
   int16_t i;
   uint8_t sensors=0, com_stop;
+  uint32_t baudrate;
+  uint16_t bytesize, parity, stopbits, hwfc;
 
   while (1){
     cdc_gets(cmd, sizeof(cmd));
@@ -98,8 +100,64 @@ void vChatTask(void *vpars){
     }
     else
     if (strcmp(tk, "comi") == 0){
-      com_init(0,0,0,0,0);
+      if (!((tk = _strtok(0,0)) && (baudrate=atoi(tk)))) goto com_parse_err;
+
+
+      if (!(tk = _strtok(0,0))) goto com_parse_err;
+      switch (tk[0]){
+        case '8':
+          bytesize = USART_WordLength_8b;
+          break;
+        case '9':
+          bytesize = USART_WordLength_9b;
+          break;
+        default:
+          goto com_parse_err;          
+      }
+      
+      if (!(tk = _strtok(0,0))) goto com_parse_err;
+      switch (tk[0]){
+        case 'N':
+          parity = USART_Parity_No;
+          break;
+        case 'E':
+          bytesize = USART_Parity_Even;
+          break;
+        case 'O':
+          bytesize = USART_Parity_Even;
+          break;
+        default:
+          goto com_parse_err;          
+      }
+
+      if (!(tk = _strtok(0,0))) goto com_parse_err;
+      switch (tk[0]){
+        case '1':
+          stopbits = USART_StopBits_1;
+          break;
+        case '2':
+          stopbits = USART_StopBits_2;
+          break;
+        default:
+          goto com_parse_err;          
+      }
+
+      if (!(tk = _strtok(0,0))) goto com_parse_err;
+      switch (tk[0]){
+        case '0':
+          hwfc = USART_HardwareFlowControl_None;
+          break;
+        case '1':
+          hwfc = USART_HardwareFlowControl_RTS_CTS;
+          break;
+        default:
+          goto com_parse_err;          
+      }
+      com_init(baudrate, bytesize, parity, stopbits, hwfc);
       cdc_write_buf(&cdc_out, "\nOK\n", 4);
+      continue;
+com_parse_err:
+      cdc_write_buf(&cdc_out, "\nERR\n", 5);
     }
     else
     if (strcmp(tk, "com") == 0){
@@ -135,7 +193,7 @@ void vChatTask(void *vpars){
       cdc_write_buf(&cdc_out, "OK\n", 4);
     }
     else
-      cdc_write_buf(&cdc_out, "ERR\n", 4);
+      cdc_write_buf(&cdc_out, "Unknown command\nERR\n", 4);
 
 //    cdc_write_buf(&cdc_out, s, strlen(s));
   }

@@ -15,7 +15,7 @@ void USART2_IRQHandler(void){
   }
 }
 
-void com_init(uint32_t baudrate, uint8_t bytesize, char parity, uint8_t stopbits, uint8_t hwfc){
+void com_init(uint32_t baudrate, uint16_t bytesize, uint16_t parity, uint16_t stopbits, uint16_t hwfc){
   USART_InitTypeDef USART_InitStructure;
   NVIC_InitTypeDef NVIC_InitStructure;
   GPIO_InitTypeDef  sGPIOinit;
@@ -28,11 +28,19 @@ void com_init(uint32_t baudrate, uint8_t bytesize, char parity, uint8_t stopbits
   sGPIOinit.GPIO_Speed = GPIO_Speed_10MHz;
   sGPIOinit.GPIO_Mode = GPIO_Mode_AF_PP;
   GPIO_Init(GPIOA, &sGPIOinit);
+
+  //RTS
+  sGPIOinit.GPIO_Pin = GPIO_Pin_1;
+  GPIO_Init(GPIOA, &sGPIOinit);
+
   // RX 
   sGPIOinit.GPIO_Pin = GPIO_Pin_3;
   sGPIOinit.GPIO_Mode = GPIO_Mode_IN_FLOATING;
   GPIO_Init(GPIOA, &sGPIOinit);
-  // TODO: RTS,CTS
+
+  // CTS
+  sGPIOinit.GPIO_Pin = GPIO_Pin_0;
+  GPIO_Init(GPIOA, &sGPIOinit);
 
   NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
@@ -40,11 +48,11 @@ void com_init(uint32_t baudrate, uint8_t bytesize, char parity, uint8_t stopbits
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 
-  USART_InitStructure.USART_BaudRate = 9600;
-  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-  USART_InitStructure.USART_StopBits = USART_StopBits_1;
-  USART_InitStructure.USART_Parity = USART_Parity_No;
-  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART_InitStructure.USART_BaudRate = baudrate;
+  USART_InitStructure.USART_WordLength = bytesize; //USART_WordLength_8b;
+  USART_InitStructure.USART_StopBits = stopbits; // USART_StopBits_1;
+  USART_InitStructure.USART_Parity = parity;//USART_Parity_No;
+  USART_InitStructure.USART_HardwareFlowControl = hwfc; //USART_HardwareFlowControl_None;
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 
   USART_DeInit(USART2);
