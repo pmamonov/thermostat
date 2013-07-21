@@ -20,24 +20,14 @@ int main(void){
   portBASE_TYPE err;
   char s[64];
 
-
   SystemInit();
   Set_System();
-
-
-  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-  GPIO_InitTypeDef sGPIOinit;
-  sGPIOinit.GPIO_Mode = GPIO_Mode_Out_OD;
-  sGPIOinit.GPIO_Speed = GPIO_Speed_10MHz;
-  sGPIOinit.GPIO_Pin = 1<<6;
-  GPIO_Init(GPIOC, &sGPIOinit);
-  GPIO_ResetBits(GPIOC, 1<<6);
 
   Set_USBClock();
   USB_Interrupts_Config();
   USB_Init();
-
-//  vChatTask(0);
+  
+  tem_init();
 
   err = xTaskCreate( vBlinkTask, "blink", 64, NULL, tskIDLE_PRIORITY+1, NULL );
   if ( err == pdPASS)
@@ -78,6 +68,7 @@ void vChatTask(void *vpars){
   uint8_t sensors=0, com_stop;
   uint32_t baudrate;
   uint16_t bytesize, parity, stopbits, hwfc;
+  int tem_id, tem_val, tem_tim;
 
   while (1){
     cdc_gets(cmd, sizeof(cmd));
@@ -185,6 +176,20 @@ com_parse_err:
       cdc_write_buf(&cdc_out, "\nOK\n", 4);
     }
     else
+    if (strcmp(tk, "tem") == 0){
+      if (!(tk = _strtok(0,0))) goto tem_parse_err;
+      tem_id=atoi(tk);
+      if (!(tk = _strtok(0,0))) goto tem_parse_err;
+      tem_val=atoi(tk);
+      if (!((tk = _strtok(0,0)) && (tem_tim=atoi(tk)))) goto tem_parse_err;
+
+      tem_enable(tem_id, tem_val, tem_tim);
+      cdc_write_buf(&cdc_out, "OK\n", 4);
+      continue;
+tem_parse_err:      
+      cdc_write_buf(&cdc_out, "\nERR\n", 5);
+    }
+    else
     if (strcmp(tk, "test") == 0){
       while (tk=_strtok(0,0)){
         cdc_write_buf(&cdc_out, tk, strlen(tk));
@@ -201,6 +206,13 @@ com_parse_err:
 
 void vBlinkTask(void *vpars){
   volatile int i;
+//  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+  GPIO_InitTypeDef sGPIOinit;
+  sGPIOinit.GPIO_Mode = GPIO_Mode_Out_OD;
+  sGPIOinit.GPIO_Speed = GPIO_Speed_10MHz;
+  sGPIOinit.GPIO_Pin = 1<<6;
+  GPIO_Init(GPIOC, &sGPIOinit);
+  GPIO_ResetBits(GPIOC, 1<<6);
   while (1){
     if (GPIO_ReadOutputData(GPIOC) & (1<<6)) GPIO_ResetBits(GPIOC, 1<<6);
     else GPIO_SetBits(GPIOC, 1<<6);

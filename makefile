@@ -36,9 +36,11 @@ OBJ = src/startup_stm32f10x_md.o\
   src/ts.o\
   src/strtok.o\
   src/com.o\
+  src/tem.o\
   FreeRTOS/Source/tasks.o\
   FreeRTOS/Source/queue.o\
   FreeRTOS/Source/list.o\
+  FreeRTOS/Source/timers.o\
   FreeRTOS/Source/portable/GCC/ARM_CM3/port.o\
   FreeRTOS/Source/portable/MemMang/heap_1.o\
   STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.o\
