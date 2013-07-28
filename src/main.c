@@ -205,7 +205,7 @@ tem_parse_err:
 }
 
 void vBlinkTask(void *vpars){
-  volatile int i;
+  volatile int i, c=0, x=0, d=1;
 //  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
   GPIO_InitTypeDef sGPIOinit;
   sGPIOinit.GPIO_Mode = GPIO_Mode_Out_OD;
@@ -213,10 +213,27 @@ void vBlinkTask(void *vpars){
   sGPIOinit.GPIO_Pin = 1<<6;
   GPIO_Init(GPIOC, &sGPIOinit);
   GPIO_ResetBits(GPIOC, 1<<6);
-  while (1){
+/*  while (1){
     if (GPIO_ReadOutputData(GPIOC) & (1<<6)) GPIO_ResetBits(GPIOC, 1<<6);
     else GPIO_SetBits(GPIOC, 1<<6);
     for (i=1000000; i;i--);
+  }*/
+  while (1){
+    if (c==0){
+      c = 1;
+      if (x==0) d=1;
+      if (x==10) d=-1;
+      x = x + d;
+      if (x==0) c=5;
+    }
+    else
+      c--;
+
+    if (x>0) GPIO_ResetBits(GPIOC, 1<<6);
+    for (i=0; i<10; i++) {
+      if (i>=x) GPIO_SetBits(GPIOC, 1<<6);
+      vTaskDelay(1);
+    }
   }
 }
 
