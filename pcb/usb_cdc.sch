@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Чтв 27 Июн 2013 16:33:48
+EESchema Schematic File Version 2  date Втр 30 Июл 2013 22:41:59
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -40,7 +40,7 @@ $Descr A2 23400 16535
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "27 jun 2013"
+Date "30 jul 2013"
 Rev ""
 Comp ""
 Comment1 ""
@@ -48,6 +48,86 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+$Comp
+L R R?
+U 1 1 51F808E6
+P 11400 12650
+F 0 "R?" V 11480 12650 50  0000 C CNN
+F 1 "R" V 11400 12650 50  0000 C CNN
+	1    11400 12650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51F808E1
+P 11400 11950
+F 0 "R?" V 11480 11950 50  0000 C CNN
+F 1 "R" V 11400 11950 50  0000 C CNN
+	1    11400 11950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51F808CA
+P 11400 10300
+F 0 "R?" V 11480 10300 50  0000 C CNN
+F 1 "R" V 11400 10300 50  0000 C CNN
+	1    11400 10300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51F808BE
+P 11400 9600
+F 0 "R?" V 11480 9600 50  0000 C CNN
+F 1 "R" V 11400 9600 50  0000 C CNN
+	1    11400 9600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51F808A7
+P 11400 7950
+F 0 "R?" V 11480 7950 50  0000 C CNN
+F 1 "R" V 11400 7950 50  0000 C CNN
+	1    11400 7950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51F8089B
+P 11400 7250
+F 0 "R?" V 11480 7250 50  0000 C CNN
+F 1 "R" V 11400 7250 50  0000 C CNN
+	1    11400 7250
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51F8088A
+P 11400 5600
+F 0 "R?" V 11480 5600 50  0000 C CNN
+F 1 "R" V 11400 5600 50  0000 C CNN
+	1    11400 5600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R?
+U 1 1 51F80878
+P 11400 4900
+F 0 "R?" V 11480 4900 50  0000 C CNN
+F 1 "R" V 11400 4900 50  0000 C CNN
+	1    11400 4900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9350 4650 9450 4650
+Wire Wire Line
+	9450 4650 9450 4750
+Wire Wire Line
+	5850 7600 6100 7600
+Wire Wire Line
+	5950 5050 6300 5050
 Wire Wire Line
 	5950 4950 6300 4950
 Connection ~ 6300 2800
@@ -775,6 +855,121 @@ Wire Wire Line
 	6300 3150 6300 2500
 Wire Wire Line
 	6100 5550 6300 5550
+Wire Wire Line
+	9300 5700 9300 5600
+Wire Wire Line
+	9300 5600 9350 5600
+Wire Wire Line
+	5350 7700 5350 7600
+Wire Wire Line
+	5350 7600 5450 7600
+Wire Wire Line
+	7900 4350 8300 4350
+Wire Wire Line
+	8300 4350 8300 4650
+Wire Wire Line
+	8300 4650 8450 4650
+$Comp
+L GND #PWR?
+U 1 1 51F80817
+P 9450 4750
+F 0 "#PWR?" H 9450 4750 30  0001 C CNN
+F 1 "GND" H 9450 4680 30  0001 C CNN
+	1    9450 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 51F80802
+P 8700 4650
+F 0 "R?" V 8780 4650 50  0000 C CNN
+F 1 "1k" V 8700 4650 50  0000 C CNN
+	1    8700 4650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L LED D?
+U 1 1 51F807B1
+P 9150 4650
+F 0 "D?" H 9150 4750 50  0000 C CNN
+F 1 "LED" H 9150 4550 50  0000 C CNN
+	1    9150 4650
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 51F8075A
+P 6350 7600
+F 0 "R?" V 6430 7600 50  0000 C CNN
+F 1 "1k" V 6350 7600 50  0000 C CNN
+	1    6350 7600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 51F8074C
+P 5350 7700
+F 0 "#PWR?" H 5350 7700 30  0001 C CNN
+F 1 "GND" H 5350 7630 30  0001 C CNN
+	1    5350 7700
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D?
+U 1 1 51F8073A
+P 5650 7600
+F 0 "D?" H 5650 7700 50  0000 C CNN
+F 1 "LED" H 5650 7500 50  0000 C CNN
+	1    5650 7600
+	-1   0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 51F806C2
+P 5700 5050
+F 0 "R?" V 5780 5050 50  0000 C CNN
+F 1 "200" V 5700 5050 50  0000 C CNN
+	1    5700 5050
+	0    -1   -1   0   
+$EndComp
+Text Label 9350 5100 2    60   ~ 0
+ls_4
+$Comp
+L CONN_6 P?
+U 1 1 51F80666
+P 9700 5350
+F 0 "P?" V 9650 5350 60  0000 C CNN
+F 1 "CONN_6" V 9750 5350 60  0000 C CNN
+	1    9700 5350
+	1    0    0    -1  
+$EndComp
+Text Label 7900 5050 0    60   ~ 0
+ls_4
+Text Label 9350 5200 2    60   ~ 0
+ls_3
+Text Label 9350 5300 2    60   ~ 0
+ls_2
+Text Label 9350 5400 2    60   ~ 0
+ls_1
+Text Label 9350 5500 2    60   ~ 0
+ls_0
+$Comp
+L GND #PWR?
+U 1 1 51F8058D
+P 9300 5700
+F 0 "#PWR?" H 9300 5700 30  0001 C CNN
+F 1 "GND" H 9300 5630 30  0001 C CNN
+	1    9300 5700
+	1    0    0    -1  
+$EndComp
+Text Label 7900 5250 0    60   ~ 0
+ls_3
+Text Label 7900 5450 0    60   ~ 0
+ls_2
+Text Label 7900 5650 0    60   ~ 0
+ls_1
+Text Label 7900 5850 0    60   ~ 0
+ls_0
 $Comp
 L R R?
 U 1 1 51CC30F7
@@ -838,25 +1033,25 @@ F 1 "JUMPER" H 6600 2420 40  0000 C CNN
 	1    6600 2500
 	1    0    0    -1  
 $EndComp
-Text Label 6300 5050 2    60   ~ 0
+Text Label 5450 5050 2    60   ~ 0
 usart2_rx
 Text Label 5450 4950 2    60   ~ 0
 usart2_tx
-Text Label 11650 11950 2    60   ~ 0
+Text Label 11150 11950 2    60   ~ 0
 tem3_dir
-Text Label 11650 12650 2    60   ~ 0
+Text Label 11150 12650 2    60   ~ 0
 tem3_en
-Text Label 11650 9600 2    60   ~ 0
+Text Label 11150 9600 2    60   ~ 0
 tem2_dir
-Text Label 11650 10300 2    60   ~ 0
+Text Label 11150 10300 2    60   ~ 0
 tem2_en
-Text Label 11650 7250 2    60   ~ 0
+Text Label 11150 7250 2    60   ~ 0
 tem1_dir
-Text Label 11650 7950 2    60   ~ 0
+Text Label 11150 7950 2    60   ~ 0
 tem1_en
-Text Label 11650 5600 2    60   ~ 0
+Text Label 11150 5600 2    60   ~ 0
 tem0_en
-Text Label 11650 4900 2    60   ~ 0
+Text Label 11150 4900 2    60   ~ 0
 tem0_dir
 $Comp
 L GND #PWR?
