@@ -37,6 +37,7 @@ OBJ = src/startup_stm32f10x_md.o\
   src/strtok.o\
   src/com.o\
   src/tem.o\
+  src/ls.o\
   FreeRTOS/Source/tasks.o\
   FreeRTOS/Source/queue.o\
   FreeRTOS/Source/list.o\

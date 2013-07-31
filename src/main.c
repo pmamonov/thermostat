@@ -13,8 +13,16 @@
 #include "strtok.h"
 #include "com.h"
 
+#define SYS_LED_RCC RCC_APB2Periph_GPIOC
+#define SYS_LED_GPIO GPIOC
+#define SYS_LED_PIN GPIO_Pin_15
+
+volatile uint8_t sensors;
+
 void vChatTask(void* vpars);
 void vBlinkTask(void* vpars);
+void status_err();
+void status_ok();
 
 int main(void){
   portBASE_TYPE err;
@@ -23,11 +31,22 @@ int main(void){
   SystemInit();
   Set_System();
 
+  // Enable System LED
+  GPIO_InitTypeDef sGPIOinit;
+  sGPIOinit.GPIO_Mode = GPIO_Mode_Out_PP;
+  sGPIOinit.GPIO_Speed = GPIO_Speed_10MHz;
+  sGPIOinit.GPIO_Pin = SYS_LED_PIN;
+  GPIO_Init(SYS_LED_GPIO, &sGPIOinit);
+  GPIO_SetBits(SYS_LED_GPIO, SYS_LED_PIN);
+
   Set_USBClock();
   USB_Interrupts_Config();
   USB_Init();
-  
+
+
+  ls_init();
   tem_init();
+  sensors = ts_init();
 
   err = xTaskCreate( vBlinkTask, "blink", 64, NULL, tskIDLE_PRIORITY+1, NULL );
   if ( err == pdPASS)
@@ -65,7 +84,7 @@ void vChatTask(void *vpars){
   char cmd[64];
   char *tk;
   int16_t i;
-  uint8_t sensors=0, com_stop;
+  uint8_t com_stop;
   uint32_t baudrate;
   uint16_t bytesize, parity, stopbits, hwfc;
   int tem_id, tem_val, tem_tim;
@@ -82,12 +101,13 @@ void vChatTask(void *vpars){
           cdc_write_buf(&cdc_out, s, strlen(s));
         }
       }
-        cdc_write_buf(&cdc_out, "\nOK\n", 4);
+        status_ok();//cdc_write_buf(&cdc_out, "\nOK\n", 4);
     }
     else
     if (strcmp(tk, "snsi") == 0){
-      sniprintf(s,sizeof(s),"%d\nOK\n", sensors=ts_init());
+      sniprintf(s,sizeof(s),"%d", sensors=ts_init());
       cdc_write_buf(&cdc_out, s, strlen(s));
+      status_ok();
     }
     else
     if (strcmp(tk, "comi") == 0){
@@ -145,13 +165,14 @@ void vChatTask(void *vpars){
           goto com_parse_err;          
       }
       com_init(baudrate, bytesize, parity, stopbits, hwfc);
-      cdc_write_buf(&cdc_out, "\nOK\n", 4);
+      status_ok();//cdc_write_buf(&cdc_out, "\nOK\n", 4);
       continue;
 com_parse_err:
-      cdc_write_buf(&cdc_out, "\nERR\n", 5);
+      status_err();//cdc_write_buf(&cdc_out, "\nERR\n", 5);
     }
     else
     if (strcmp(tk, "com") == 0){
+      status_ok();
       com_stop=0;
       while(!com_stop){
         i = cdc_read_buf(&com_in, cmd, sizeof(cmd));
@@ -173,7 +194,7 @@ com_parse_err:
         }
         if (i) com_send();
       }
-      cdc_write_buf(&cdc_out, "\nOK\n", 4);
+      status_ok();//cdc_write_buf(&cdc_out, "\nOK\n", 4);
     }
     else
     if (strcmp(tk, "tem") == 0){
@@ -184,22 +205,40 @@ com_parse_err:
       if (!((tk = _strtok(0,0)) && (tem_tim=atoi(tk)))) goto tem_parse_err;
 
       tem_enable(tem_id, tem_val, tem_tim);
-      cdc_write_buf(&cdc_out, "OK\n", 4);
+      status_ok(); //cdc_write_buf(&cdc_out, "OK\n", 4);
       continue;
 tem_parse_err:      
-      cdc_write_buf(&cdc_out, "\nERR\n", 5);
+      status_err(); //cdc_write_buf(&cdc_out, "\nERR\n", 5);
+    }
+    else
+    if (strcmp(tk, "temq") == 0){
+      if (!(tk = _strtok(0,0)))
+        status_err();//cdc_write_buf(&cdc_out, "\nERR\n", 4);
+      else{
+      tem_val = tem_get(atoi(tk));
+      sniprintf(s, sizeof(s),"%d", (tem_val & 1) ? 0 : (tem_val & 2 ? 1 : -1));
+      cdc_write_buf(&cdc_out, s, strlen(s));
+      status_ok();//cdc_write_buf(&cdc_out, "\nOK\n", 4);
+      }
+    }
+    else
+    if (strcmp(tk, "lsq") == 0){
+      sniprintf(s, sizeof(s),"%d", ls_get());
+      cdc_write_buf(&cdc_out, s, strlen(s));
+      status_ok();//cdc_write_buf(&cdc_out, "\nOK\n", 4);
     }
     else
     if (strcmp(tk, "test") == 0){
       while (tk=_strtok(0,0)){
         cdc_write_buf(&cdc_out, tk, strlen(tk));
-        cdc_write_buf(&cdc_out, "\n", 1);
+        cdc_write_buf(&cdc_out, ",", 1);
       }
-      cdc_write_buf(&cdc_out, "OK\n", 4);
+      status_ok(); //cdc_write_buf(&cdc_out, "OK\n", 4);
     }
-    else
-      cdc_write_buf(&cdc_out, "Unknown command\nERR\n", 4);
-
+    else{
+      cdc_write_buf(&cdc_out, "Unknown command", 15);
+      status_err();
+    }
 //    cdc_write_buf(&cdc_out, s, strlen(s));
   }
 }
@@ -207,12 +246,6 @@ tem_parse_err:
 void vBlinkTask(void *vpars){
   volatile int i, c=0, x=0, d=1;
 //  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-  GPIO_InitTypeDef sGPIOinit;
-  sGPIOinit.GPIO_Mode = GPIO_Mode_Out_OD;
-  sGPIOinit.GPIO_Speed = GPIO_Speed_10MHz;
-  sGPIOinit.GPIO_Pin = 1<<6;
-  GPIO_Init(GPIOC, &sGPIOinit);
-  GPIO_ResetBits(GPIOC, 1<<6);
 /*  while (1){
     if (GPIO_ReadOutputData(GPIOC) & (1<<6)) GPIO_ResetBits(GPIOC, 1<<6);
     else GPIO_SetBits(GPIOC, 1<<6);
@@ -229,9 +262,9 @@ void vBlinkTask(void *vpars){
     else
       c--;
 
-    if (x>0) GPIO_ResetBits(GPIOC, 1<<6);
+    if (x>0) GPIO_SetBits(SYS_LED_GPIO, SYS_LED_PIN);
     for (i=0; i<10; i++) {
-      if (i>=x) GPIO_SetBits(GPIOC, 1<<6);
+      if (i>=x) GPIO_ResetBits(SYS_LED_GPIO, SYS_LED_PIN);
       vTaskDelay(1);
     }
   }
@@ -239,6 +272,14 @@ void vBlinkTask(void *vpars){
 
 void vApplicationStackOverflowHook( xTaskHandle xTask, signed portCHAR *pcTaskName ){
   while(1);
+}
+
+void status_err(){
+  cdc_write_buf(&cdc_out, "\nERR\n", 5);
+}
+
+void status_ok(){
+  cdc_write_buf(&cdc_out, "\nOK\n", 4);
 }
 
 #ifdef USE_FULL_ASSERT

@@ -46,3 +46,8 @@ void tem_disable(uint8_t i){
     GPIO_SetBits(tems[i].en_gpio, tems[i].en_pin); // disable TEM
 };
 
+uint8_t tem_get(uint8_t i){
+  if (i<NUM_TEMS)
+    return (GPIO_ReadOutputDataBit(tems[i].dir_gpio, tems[i].dir_pin)<<1) | GPIO_ReadOutputDataBit(tems[i].en_gpio, tems[i].en_pin);
+};
+

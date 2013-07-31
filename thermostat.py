@@ -9,25 +9,25 @@ class Thermostat:
       device: string, valid OS serial device name (passed to pySerial)
     """
     if not device: raise NameError, "Device search not implemented"
-    self.sr = Serial(device, timeout = 0.1)
+    self.sr = Serial(device, timeout = 0.25)
     self.temp_init()
 
-  def cmd(self, s):
-    while self.sr.read(1024): pass
-    self.sr.write(s+'\n')
-    r=self.sr.readlines()
-    if not r: raise NameError, "No reply from device"
-#    if r[-1].strip()[:3] == "ERR": raise NameError, "Error %s"%(r[-1].strip()[3:])
-    if r[-1].strip()[:3] == "ERR": raise NameError, "Device communication error"
-    if r[-1].strip() == "OK": return r[0].strip()
+  def cmd(self, s, newln=True):
+    if self.sr.inWaiting(): self.sr.read(self.sr.inWaiting())
+    if newln: self.sr.write(s+'\n')
+    else: self.sr.write(s)
+    r1,r2=self.sr.readline(),self.sr.readline()
+    if not r2: raise NameError, "No reply from device"
+    if r2.strip()[:3] == "ERR": raise NameError, "Device communication error"
+    if r2.strip() == "OK": return r1.strip()
     raise NameError, "Device reply not understood"
 
   def temp_init(self):
     r = int(self.cmd("snsi"))
     s=[]
     for i in xrange(8):
-      if (r & (1<<i)): s.append(True)
-      else: s.append(False)
+      if (r & (1<<i)): s.append(i)
+#      else: s.append(False)
     self.sens_avail = s
     return s
 
@@ -43,7 +43,8 @@ class Thermostat:
     temp = {}
     for iv in r: 
       i,v = map(int, iv.split(":"))
-      if self.sens_avail[i]: temp[i] = v/256.
+#      if self.sens_avail[i]: 
+      temp[i] = v/256.
     return temp
 
 
@@ -61,7 +62,7 @@ class Thermostat:
       Returns: none
 
     """
-    pass
+    self.cmd("tem %d %d %d"%(tem_id, state, duration))
 
 
   def TEM_get(self, tem_id):
@@ -72,8 +73,9 @@ class Thermostat:
 
       Returns: TEM's state value
     """
-    curr_state = 0
-    return curr_state
+    r = self.cmd("temq %d"%tem_id)
+    return int(r)
+    #return ((1,-1)[ r&2 == 0],0)[ r&1 ]
 
 
   def lswitch_get(self):
@@ -82,7 +84,8 @@ class Thermostat:
 
         Returns: integer number, bits encode switches states.
     """
-    return 0
+    x = int(self.cmd("lsq"))
+    return map(lambda i: (1,0)[x & (1<<i) == 0], range(8))
 
   def serial_setup(self, baudrate=9600, bytesize=8, parity='N', stopbits=1, rtscts=False):
     """
@@ -96,15 +99,15 @@ class Thermostat:
 
         Returns: none
     """
-    pass
+    self.cmd("comi %d %d %s %d %d"%(baudrate, bytesize, parity, stopbits, (0,1)[rtscts] ))
 
   def serial_start(self):
     self.cmd("com")
 
   def serial_end(self):
-    self.sr.write('\xff')
+    self.cmd('\xff',False)
 
-  def serial_send(self, string):
+  def serial_send(self, s):
     """
       Send string to scales.
       
@@ -112,9 +115,9 @@ class Thermostat:
 
         Returns: none
     """
-    pass
+    self.sr.write(s)
 
-  def serial_recv(self, length=-1):
+  def serial_recv(self, l=1):
     """
       Receive up to `length` bytes from scales. Non blocking.
 
@@ -122,4 +125,14 @@ class Thermostat:
 
         Returns: string contining up to `length` bytes
     """
-    return ""
+    return self.sr.read(l)
+
+  def serial_readline(self):
+    """
+      Receive up to `length` bytes from scales. Non blocking.
+
+        length: number of bytes to recieve.
+
+        Returns: string contining up to `length` bytes
+    """
+    return self.sr.readline(1)

@@ -26,4 +26,5 @@ TemType tems[NUM_TEMS] = {\
 void tem_init();
 void tem_enable(uint8_t id, int val, uint32_t tim);
 void tem_disable(uint8_t id);
+uint8_t tem_get(uint8_t id);
 
