@@ -3,10 +3,14 @@ from serial import Serial
 class Thermostat:
   def __init__(self, device=None):
     """
-    Searh for valid serial port with thermostat attached
+    Searh for valid serial port with thermostat attached (not implemented)
     or use one specified by device string. Then open connection to it.
 
+    ARGUMENTS
       device: string, valid OS serial device name (passed to pySerial)
+
+    RETURN
+      none
     """
     if not device: raise NameError, "Device search not implemented"
     self.sr = Serial(device, timeout = 0.25)
@@ -23,6 +27,15 @@ class Thermostat:
     raise NameError, "Device reply not understood"
 
   def temp_init(self):
+    """
+    Initialize temperature sensors.
+    
+    ARGUMENTS
+      none
+
+    RETURNS
+      List of ID's of detected sensors
+    """
     r = int(self.cmd("snsi"))
     s=[]
     for i in xrange(8):
@@ -37,7 +50,11 @@ class Thermostat:
     Return dictionary of temperature values acquired by sensors. 
     Only values of detected sensors are returned
 
-    Returns: dict of temperature values
+    ARGUMENTS
+      none
+
+    RETURN
+      dictinary of temperature values: {ID1:T1, ID2:T2, ...}
     """
     r = self.cmd("temp").split(' ')
     temp = {}
@@ -52,6 +69,8 @@ class Thermostat:
     """
     Enable TEM specified by tem_id for a given amount of time 
     or disable it immediately.
+
+    ARGUMENTS
  
       tem_id: TEM ID number (0-3)
 
@@ -59,8 +78,8 @@ class Thermostat:
 
       duration: state duration in ms
 
-      Returns: none
-
+    RETURN
+      none
     """
     self.cmd("tem %d %d %d"%(tem_id, state, duration))
 
@@ -69,9 +88,12 @@ class Thermostat:
     """
     Returns current state of TEM identified by `tem_id`
 
+    ARGUMENTS
+
       tem_id: TEM ID number (0-3)
 
-      Returns: TEM's state value
+    RETURN
+      TEM's state
     """
     r = self.cmd("temq %d"%tem_id)
     return int(r)
@@ -80,9 +102,13 @@ class Thermostat:
 
   def lswitch_get(self):
     """
-      Returns bitmask with limit switches states
+      Get limit switches states
 
-        Returns: integer number, bits encode switches states.
+      ARGUMENTS
+        none
+
+      RETURN
+        list of integers, corresponding to limit switches states
     """
     x = int(self.cmd("lsq"))
     return map(lambda i: (1,0)[x & (1<<i) == 0], range(8))
@@ -91,48 +117,83 @@ class Thermostat:
     """
       Setup serial communication with scales.
 
+      ARGUMENTS
+
         baudrate: speed of communication
         bytesize: number of bits per data word
         parity: enable parity checking
         stopbits: number of stop bits
         rtscts: enable hardware flow control
 
-        Returns: none
+      RETURN 
+        none
     """
     self.cmd("comi %d %d %s %d %d"%(baudrate, bytesize, parity, stopbits, (0,1)[rtscts] ))
 
   def serial_start(self):
+    """
+    Start scales communication session. Call it before using serial_send()/serial_recv()
+
+    ARGUMENTS
+      none
+
+    RETURN
+      none
+    """
     self.cmd("com")
 
   def serial_end(self):
+    """
+    Finish scales communication session.
+
+    ARGUMENTS
+      none
+
+    RETURN
+      none
+    """
     self.cmd('\xff',False)
 
   def serial_send(self, s):
     """
-      Send string to scales.
+      Send string to scales. A call to serial_start() 
+      is required before use of this function.
+
+      ARGUMENTS
       
         string: string to send
 
-        Returns: none
+      RETURN
+
+        none
     """
     self.sr.write(s)
 
   def serial_recv(self, l=1):
     """
-      Receive up to `length` bytes from scales. Non blocking.
+      Receive up to `length` bytes from scales. A call is blocking. 
+      Timeout is set in __init__() function.
+      A call to serial_start() is required before use of this function.
 
-        length: number of bytes to recieve.
+      ARGUMENTS
 
-        Returns: string contining up to `length` bytes
+        l: number of bytes to recieve.
+
+      RETURN
+        string containing up to `length` bytes
     """
     return self.sr.read(l)
 
   def serial_readline(self):
     """
-      Receive up to `length` bytes from scales. Non blocking.
+      Receive string from scales. A call is blocking. 
+      Timeout is set in __init__() function.
+      A call to serial_start() is required before use of this function.
+      
+      ARGUMENTS
+        none
 
-        length: number of bytes to recieve.
-
-        Returns: string contining up to `length` bytes
+      RETURN
+        string contining up to `length` bytes
     """
     return self.sr.readline(1)
