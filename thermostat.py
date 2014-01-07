@@ -1,3 +1,4 @@
+import serial
 from serial import Serial
 
 class Thermostat:
@@ -13,14 +14,16 @@ class Thermostat:
       none
     """
     if not device: raise NameError, "Device search not implemented"
-    self.sr = Serial(device, timeout = 0.25)
+    self.sr = Serial(device, timeout=1, baudrate=115200)
+#    self.sr = Serial(device, timeout=1)
     self.temp_init()
 
   def cmd(self, s, newln=True):
-    if self.sr.inWaiting(): self.sr.read(self.sr.inWaiting())
+    self.sr.flushInput()
     if newln: self.sr.write(s+'\n')
     else: self.sr.write(s)
     r1,r2=self.sr.readline(),self.sr.readline()
+    print "%s -> %s [%s]" % tuple( map(lambda x: x.strip(), (s,r1,r2)))
     if not r2: raise NameError, "No reply from device"
     if r2.strip()[:3] == "ERR": raise NameError, "Device communication error"
     if r2.strip() == "OK": return r1.strip()

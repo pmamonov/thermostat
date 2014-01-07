@@ -13,9 +13,9 @@
 #include "strtok.h"
 #include "com.h"
 
-#define SYS_LED_RCC RCC_APB2Periph_GPIOC
-#define SYS_LED_GPIO GPIOC
-#define SYS_LED_PIN GPIO_Pin_15
+#define SYS_LED_RCC RCC_APB2Periph_GPIOB
+#define SYS_LED_GPIO GPIOB
+#define SYS_LED_PIN GPIO_Pin_12
 
 volatile uint8_t sensors;
 
@@ -28,10 +28,11 @@ int main(void){
   portBASE_TYPE err;
   char s[64];
 
-  SystemInit();
+//  SystemInit();
   Set_System();
 
   // Enable System LED
+  RCC_APB2PeriphClockCmd(SYS_LED_RCC, ENABLE);
   GPIO_InitTypeDef sGPIOinit;
   sGPIOinit.GPIO_Mode = GPIO_Mode_Out_PP;
   sGPIOinit.GPIO_Speed = GPIO_Speed_10MHz;
@@ -46,7 +47,7 @@ int main(void){
 
   ls_init();
   tem_init();
-  sensors = ts_init();
+//  sensors = ts_init();
 
   err = xTaskCreate( vBlinkTask, "blink", 64, NULL, tskIDLE_PRIORITY+1, NULL );
   if ( err == pdPASS)
@@ -216,7 +217,7 @@ tem_parse_err:
         status_err();//cdc_write_buf(&cdc_out, "\nERR\n", 4);
       else{
       tem_val = tem_get(atoi(tk));
-      sniprintf(s, sizeof(s),"%d", (tem_val & 1) ? 0 : (tem_val & 2 ? 1 : -1));
+      sniprintf(s, sizeof(s),"%d", (tem_val & 1) ? (tem_val & 2 ? 1 : -1) : 0);
       cdc_write_buf(&cdc_out, s, strlen(s));
       status_ok();//cdc_write_buf(&cdc_out, "\nOK\n", 4);
       }
@@ -245,13 +246,8 @@ tem_parse_err:
 
 void vBlinkTask(void *vpars){
   volatile int i, c=0, x=0, d=1;
-//  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-/*  while (1){
-    if (GPIO_ReadOutputData(GPIOC) & (1<<6)) GPIO_ResetBits(GPIOC, 1<<6);
-    else GPIO_SetBits(GPIOC, 1<<6);
-    for (i=1000000; i;i--);
-  }*/
   while (1){
+/*
     if (c==0){
       c = 1;
       if (x==0) d=1;
@@ -267,6 +263,10 @@ void vBlinkTask(void *vpars){
       if (i>=x) GPIO_ResetBits(SYS_LED_GPIO, SYS_LED_PIN);
       vTaskDelay(1);
     }
+*/
+    if (GPIO_ReadOutputDataBit(SYS_LED_GPIO, SYS_LED_PIN)) GPIO_ResetBits(SYS_LED_GPIO, SYS_LED_PIN);
+    else GPIO_SetBits(SYS_LED_GPIO, SYS_LED_PIN);
+    vTaskDelay(200);
   }
 }
 

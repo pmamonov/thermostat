@@ -16,7 +16,8 @@ void tem_init(){
 
     sGPIOinit.GPIO_Pin = tems[i].en_pin;
     GPIO_Init(tems[i].en_gpio, &sGPIOinit);
-    GPIO_SetBits(tems[i].en_gpio, tems[i].en_pin); // disable TEM
+//    GPIO_SetBits(tems[i].en_gpio, tems[i].en_pin); // disable TEM
+    tem_disable(i);
 
     RCC_APB2PeriphClockCmd(tems[i].dir_rcc, ENABLE);
     sGPIOinit.GPIO_Pin = tems[i].dir_pin;
@@ -36,14 +37,14 @@ void tem_enable(uint8_t i, int val, uint32_t tim){
     GPIO_SetBits(tems[i].dir_gpio, tems[i].dir_pin);
   else
     GPIO_ResetBits(tems[i].dir_gpio, tems[i].dir_pin);
-  GPIO_ResetBits(tems[i].en_gpio, tems[i].en_pin); // enable TEM
+  GPIO_SetBits(tems[i].en_gpio, tems[i].en_pin); // enable TEM
   xTimerChangePeriod(tems[i].timer, tim, 0);
   xTimerStart(tems[i].timer, 0);
 };
 
 void tem_disable(uint8_t i){
   if (i<NUM_TEMS)
-    GPIO_SetBits(tems[i].en_gpio, tems[i].en_pin); // disable TEM
+    GPIO_ResetBits(tems[i].en_gpio, tems[i].en_pin); // disable TEM
 };
 
 uint8_t tem_get(uint8_t i){
