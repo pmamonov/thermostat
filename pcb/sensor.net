@@ -1,0 +1,77 @@
+# EESchema Netlist Version 1.1 created  Срд 20 Ноя 2013 23:54:26
+(
+ ( /528B3D16 SM0805 C1 C
+  ( 1 GND )
+  ( 2 +5V )
+ )
+ ( /528B3C60 SO8N D1 DS1624
+  ( 1 N-000003 )
+  ( 2 N-000004 )
+  ( 3 ? )
+  ( 4 GND )
+  ( 5 N-000008 )
+  ( 6 N-000007 )
+  ( 7 N-000006 )
+  ( 8 +5V )
+ )
+ ( /528B3CC8 SM0805 JP1 JUMPER
+  ( 1 GND )
+  ( 2 N-000006 )
+ )
+ ( /528B3CD5 SM0805 JP2 JUMPER
+  ( 1 GND )
+  ( 2 N-000007 )
+ )
+ ( /528B3CD9 SM0805 JP3 JUMPER
+  ( 1 GND )
+  ( 2 N-000008 )
+ )
+ ( /528B3D5B PIN_ARRAY_4x1 P1 CONN_4
+  ( 1 +5V )
+  ( 2 N-000003 )
+  ( 3 N-000004 )
+  ( 4 GND )
+ )
+ ( /528B3C86 SM0805 R1 R
+  ( 1 +5V )
+  ( 2 N-000006 )
+ )
+ ( /528B3C90 SM0805 R2 R
+  ( 1 +5V )
+  ( 2 N-000007 )
+ )
+ ( /528B3C94 SM0805 R3 R
+  ( 1 +5V )
+  ( 2 N-000008 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C1
+ SM*
+ C?
+ C1-1
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$endfootprintlist
+}

@@ -1,0 +1,66 @@
+Cmp-Mod V01 Created by CvPcb (2012-apr-16-27)-stable date = Срд 20 Ноя 2013 23:54:26
+
+BeginCmp
+TimeStamp = /528B3D16;
+Reference = C1;
+ValeurCmp = C;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /528B3C60;
+Reference = D1;
+ValeurCmp = DS1624;
+IdModule  = SO8N;
+EndCmp
+
+BeginCmp
+TimeStamp = /528B3CC8;
+Reference = JP1;
+ValeurCmp = JUMPER;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /528B3CD5;
+Reference = JP2;
+ValeurCmp = JUMPER;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /528B3CD9;
+Reference = JP3;
+ValeurCmp = JUMPER;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /528B3D5B;
+Reference = P1;
+ValeurCmp = CONN_4;
+IdModule  = PIN_ARRAY_4x1;
+EndCmp
+
+BeginCmp
+TimeStamp = /528B3C86;
+Reference = R1;
+ValeurCmp = R;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /528B3C90;
+Reference = R2;
+ValeurCmp = R;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /528B3C94;
+Reference = R3;
+ValeurCmp = R;
+IdModule  = SM0805;
+EndCmp
+
+EndListe

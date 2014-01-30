@@ -1,8 +1,6 @@
-update=Срд 13 Ноя 2013 01:29:37
+update=Птн 15 Ноя 2013 22:29:34
 version=1
 last_client=pcbnew
-[general]
-version=1
 [eeschema]
 version=1
 LibDir=
@@ -65,23 +63,18 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
-LibName31=/home/piton/devel/arm/stm32f102r
-LibName32=p6au
-LibName33=p6cui
-LibName34=tlp181gb
-LibName35=usblc6
-LibName36=irlbd59n04e
-LibName37=ld1117
 [cvpcb]
 version=1
 NetIExt=net
 [cvpcb/libraries]
 EquName1=devcms
+[general]
+version=1
 [pcbnew]
 version=1
-PadDrlX=1575
-PadDimH=1575
-PadDimV=1575
+PadDrlX=320
+PadDimH=600
+PadDimV=600
 BoardThickness=630
 TxtPcbV=800
 TxtPcbH=600
@@ -93,7 +86,7 @@ DrawLar=150
 EdgeLar=150
 TxtLar=120
 MSegLar=150
-LastNetListRead=usb_cdc.net
+LastNetListRead=traynik.net
 [pcbnew/libraries]
 LibDir=
 LibName1=sockets
@@ -107,9 +100,4 @@ LibName8=led
 LibName9=dip_sockets
 LibName10=pga_sockets
 LibName11=valves
-LibName12=holes
-LibName13=P6AU
-LibName14=TLP181
-LibName15=TQFP64-0,8
-LibName16=conn_kuzya
-LibName17=Molex_8981_MC
+LibName12=/home/ilya/gagarin151013/holes

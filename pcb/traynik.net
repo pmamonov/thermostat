@@ -1,0 +1,71 @@
+# EESchema Netlist Version 1.1 created  Птн 15 Ноя 2013 22:25:36
+(
+ ( /528663E3 $noname  P6 CONN_4 {Lib=CONN_4}
+  (    1 N-000001 )
+  (    2 N-000002 )
+  (    3 N-000004 )
+  (    4 GND )
+ )
+ ( /528663DC $noname  P5 CONN_4 {Lib=CONN_4}
+  (    1 N-000001 )
+  (    2 N-000002 )
+  (    3 N-000004 )
+  (    4 GND )
+ )
+ ( /528663D1 $noname  P4 CONN_4 {Lib=CONN_4}
+  (    1 N-000001 )
+  (    2 N-000002 )
+  (    3 N-000004 )
+  (    4 GND )
+ )
+ ( /528663CC $noname  P3 CONN_4 {Lib=CONN_4}
+  (    1 N-000001 )
+  (    2 N-000002 )
+  (    3 N-000004 )
+  (    4 GND )
+ )
+ ( /528663C6 $noname  P2 CONN_4 {Lib=CONN_4}
+  (    1 N-000001 )
+  (    2 N-000002 )
+  (    3 N-000004 )
+  (    4 GND )
+ )
+ ( /528663BB $noname  P1 CONN_4 {Lib=CONN_4}
+  (    1 N-000001 )
+  (    2 N-000002 )
+  (    3 N-000004 )
+  (    4 GND )
+ )
+)
+*
+{ Pin List by Nets
+Net 1 "" ""
+ P1 1
+ P2 1
+ P3 1
+ P4 1
+ P5 1
+ P6 1
+Net 2 "" ""
+ P4 2
+ P1 2
+ P2 2
+ P3 2
+ P5 2
+ P6 2
+Net 3 "GND" "GND"
+ P2 4
+ P5 4
+ P6 4
+ P4 4
+ P1 4
+ P3 4
+Net 4 "" ""
+ P2 3
+ P1 3
+ P4 3
+ P6 3
+ P3 3
+ P5 3
+}
+#End

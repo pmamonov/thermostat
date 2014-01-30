@@ -199,4 +199,4 @@ class Thermostat:
       RETURN
         string contining up to `length` bytes
     """
-    return self.sr.readline(1)
+    return self.sr.readline()
